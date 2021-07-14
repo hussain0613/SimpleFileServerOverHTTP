@@ -1,0 +1,90 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Server</title>
+</head>
+<body>
+    <p id = "message_p">
+        <ul id = "message_ul">
+
+        </ul>
+    </p>
+    <form id = "uploadForm" enctype="multipart/form-data">
+        <!-- <input type="text" name="name" id="name" placeholder="File name"><br> -->
+        <input type="file" name="files" id="files" multiple>
+        
+        <input type="submit" value="Submit">
+    </form>
+    
+    
+    <script>
+        function add_msg(msg_txt){
+            li = document.createElement("li")
+            li.innerText = msg_txt
+            
+            ul = document.getElementById("message_ul")
+            ul.appendChild(li)
+        }
+        
+        function submit(event){
+            var form_element = document.getElementById("uploadForm")
+            var formdata = new FormData(form_element)
+            
+            file_reader = new FileReader()
+            file_reader.onload = function(e){
+                
+            }
+
+            var request = new XMLHttpRequest()
+            request.open("POST", "{{ url_for('upload', directory = directory) }}", true)
+            request.onreadystatechange = function(){
+                if(this.readyState == 4 && this.status == 200){
+                    
+                    var resp = this.responseText
+                    var respJson = JSON.parse(resp)
+                    if(respJson["status"] != "failed"){
+                        add_msg(respJson["details"])
+                    }
+                    else{
+                        add_msg(respJson["details"])
+                    }
+                }
+                else if (this.readyState == 4 && this.status != 200){
+                    add_msg("error: " + this.status)
+                }
+            }
+            
+   
+            request.send(formdata)
+            event.preventDefault()
+        }
+
+        document.querySelector("#uploadForm").addEventListener("submit", submit)
+    </script>
+    
+    <form action="{{url_for('search')}}" method="GET">
+        <input type="search" name="query" id="search_field" placeholder="search">
+    </form>
+
+    <hr>
+
+    <h3>Current directory: {{ directory }}</h3>
+    <ul>
+        {% for key in d%}
+        <li>
+            <a href="{{ url_for('get_file', file_name = key) }}">{{ d[key][0] }}</a>
+            {% if os.path.isdir(key) %}
+                [dir]
+            {% else %}
+                -- {{ d[key][1] }}
+            {%  endif %}
+        </li><br>
+        {% endfor %}
+    </ul>
+
+    <hr>
+    <p><b>N.B. </b> Beta file server, not very secure, might not work properly</p>
+</body>
+</html>

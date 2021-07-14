@@ -1,0 +1,22 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Server</title>
+</head>
+<body>
+    <a href="{{ url_for('index') }}">Home</a><br>
+    <form action="{{url_for('search')}}" method="GET">
+        <input type="search" name="query" id="search_field" placeholder="search">
+    </form>
+
+    <hr>
+    <div style="align-content: center;">
+        <h1>path does not exist or you do not have permission</h1>
+    </div>
+
+    <hr>
+    <p><b>N.B. </b> Beta file server, not very secure, might not work properly</p>
+</body>
+</html>
