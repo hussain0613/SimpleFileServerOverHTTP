@@ -20,42 +20,65 @@
     
     
     <script>
-        function add_msg(msg_txt){
+        var msg_id_n = 0
+        function add_msg(msg_txt, msg_id){
             li = document.createElement("li")
             li.innerText = msg_txt
-            
+            li.id = msg_id
             ul = document.getElementById("message_ul")
             ul.appendChild(li)
         }
+
+        function update_msg(new_msg, msg_id){
+            li = document.getElementById(msg_id)
+            li.innerText = new_msg
+        }
+
         
         function submit(event){
+            msg_id_n += 1
+            msg_id = "msg_" + msg_id_n
+            add_msg("preparing upload", msg_id)
+
             var form_element = document.getElementById("uploadForm")
             var formdata = new FormData(form_element)
-            
-            file_reader = new FileReader()
-            file_reader.onload = function(e){
-                
-            }
 
             var request = new XMLHttpRequest()
             request.open("POST", "{{ url_for('upload', directory = directory) }}", true)
-            request.onreadystatechange = function(){
+            request.onreadystatechange = function(ev){
                 if(this.readyState == 4 && this.status == 200){
                     
                     var resp = this.responseText
                     var respJson = JSON.parse(resp)
                     if(respJson["status"] != "failed"){
-                        add_msg(respJson["details"])
+                        update_msg(respJson["details"], msg_id)
                     }
                     else{
-                        add_msg(respJson["details"])
+                        update_msg(respJson["details"], msg_id)
                     }
                 }
                 else if (this.readyState == 4 && this.status != 200){
-                    add_msg("error: " + this.status)
+                    update_msg("error: " + this.status, msg_id)
                 }
             }
-            
+            var total_size = 0.0
+            request.upload.onloadstart = function(ev){
+                update_msg("starting upload", msg_id)
+                total_size = Math.round(ev.total / (10**6)) // in MB
+                total_size = total_size.toFixed(2) // rounding up to 2 decimal points
+            }
+            request.upload.onprogress = function(ev){
+                var uploaded = ev.loaded/(10**6) // in MB
+                var percentage = ev.loaded/ev.total * 100
+                update_msg(`uploaded: ${uploaded.toFixed(2)}MB of ${total_size}MB -- ${percentage.toFixed(2)}%`, msg_id)
+            }
+            request.upload.onloadend = function(ev){
+                var uploaded = ev.loaded/(10**6) // in MB
+                var percentage = ev.loaded/ev.total * 100
+                
+                update_msg(`upload complete ${uploaded.toFixed(2)}MB of ${total_size}MB -- ${percentage.toFixed(2)}%`, msg_id)
+            }
+
    
             request.send(formdata)
             event.preventDefault()
