@@ -1,3 +1,9 @@
+// gathering data
+let rdir = data["root_directory"]
+let cdir = data["current_directory"]
+let pdir = data["parent_directory"]
+let contents = data["contents"]
+
 
 // actions related works
 if(permissions["upload"] == true){
@@ -61,35 +67,5 @@ if(permissions["create"] == true){
 }
 
 
-
-
-
-// getting data
-let rdir = data["root_directory"]
-let cdir = data["current_directory"]
-let pdir = data["parent_directory"]
-let contents = data["contents"]
-let contents_tbody = document.querySelector("#contents_table>tbody")
-
-// contents of the folder i.e. main part
-
-function render_tbody(){
-    contents_tbody.innerHTML = ""
-    // hudai
-    if(rdir == cdir){
-        document.getElementById("current_directory_path_span").innerText = "root"
-    }else{
-        document.getElementById("current_directory_path_span").innerText = data["current_directory"]
-    }
-
-    // actually rendering table
-    if(pdir != null){
-        create_row(pdir, {"name": "Parent Directory", "is_directory": true})
-    }
-
-    for (let key in contents){
-        create_row(key, contents[key])
-    }
-}
-
 render_tbody()
+document.getElementById("msg_div_display_toggle_btn").addEventListener("click", toggle_msg_div_display)

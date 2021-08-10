@@ -34,8 +34,34 @@ function create_row(path, content){
     row.appendChild(td1)
     row.appendChild(td2)
     row.appendChild(td3)
+
+    let contents_tbody = document.querySelector("#contents_table>tbody")
     contents_tbody.appendChild(row)
 }
+
+
+function render_tbody(){
+    let contents_tbody = document.querySelector("#contents_table>tbody")
+
+    contents_tbody.innerHTML = ""
+    // hudai
+    if(rdir == cdir){
+        document.getElementById("current_directory_path_span").innerText = "root"
+    }else{
+        document.getElementById("current_directory_path_span").innerText = data["current_directory"]
+    }
+
+    // actually rendering table
+    if(pdir != null){
+        create_row(pdir, {"name": "Parent Directory", "is_directory": true})
+    }
+
+    for (let key in contents){
+        create_row(key, contents[key])
+    }
+}
+
+
 
 function action_divs_display_toggle(div, div2, div3, div4){
     if(div.style.display == "none"){
@@ -95,6 +121,20 @@ function add_msg(msg_string){
 function update_msg(msg_serial, msg_string){
     let msg_li = document.getElementById("msg_"+msg_serial)
     msg_li.innerText = msg_string
+}
+
+
+function toggle_msg_div_display(){
+    let msg_div_display_toggle_btn = document.getElementById("msg_div_display_toggle_btn")
+    let msg_div = document.getElementById("msg_div")
+    if(msg_div.style.display == "none"){
+        msg_div.style.display = "block"
+        document.getElementById("msg_div_display_toggle_btn").innerText = "Hide Messages"
+    }
+    else {
+        msg_div.style.display = "none"
+        document.getElementById("msg_div_display_toggle_btn").innerText = "Show Messages"
+    }
 }
 
 
