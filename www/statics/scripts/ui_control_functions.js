@@ -137,4 +137,8 @@ function toggle_msg_div_display(){
     }
 }
 
+function clear_messages(){
+    document.getElementById("msg_ul").innerHTML = ""
+}
+
 
