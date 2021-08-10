@@ -50,3 +50,7 @@ a, a:hover, a:active, a:visited{
 .text_right_align{
     text-align: right;
 }
+
+.non_button_button{
+    cursor: pointer;
+}

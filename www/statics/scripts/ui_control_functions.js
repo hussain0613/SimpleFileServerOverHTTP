@@ -26,7 +26,23 @@ function create_row(path, content){
 
     let td3 = document.createElement("td")
     td3.innerHTML = content["date"]? content["date"]:"-"
-    td3.classList.add("text_right_align")
+    td3.classList.add("text_center_align")
+
+
+    
+    let td4 = document.createElement("td")
+    td4.classList.add("text_right_align")
+    if(content["name"] != "Parent Directory"){
+        let download_icon = document.createElement("img")
+        download_icon.classList.add("content_icon")
+        download_icon.classList.add("non_button_button")
+        download_icon.src = "././res/download.svg"
+        download_icon.onclick = function(event){
+            let msg_cnt = add_msg("preparing " + content["name"])
+            // call download function
+        }
+        td4.appendChild(download_icon)
+    }
 
     let row = document.createElement("tr")
     row.classList.add("content_row")
@@ -34,6 +50,7 @@ function create_row(path, content){
     row.appendChild(td1)
     row.appendChild(td2)
     row.appendChild(td3)
+    row.appendChild(td4)
 
     let contents_tbody = document.querySelector("#contents_table>tbody")
     contents_tbody.appendChild(row)
@@ -113,14 +130,15 @@ function add_msg(msg_string){
 
     let msg_li = document.createElement("li")
     msg_li.id = "msg_"+message_count
-    msg_li.innerText = msg_string
+    msg_li.innerHTML = "[" +(new Date()).toLocaleString() + "] \t" + msg_string
     
     document.getElementById("msg_ul").appendChild(msg_li)
+    return message_count
 }
 
 function update_msg(msg_serial, msg_string){
     let msg_li = document.getElementById("msg_"+msg_serial)
-    msg_li.innerText = msg_string
+    msg_li.innerHTML = "[" +(new Date()).toLocaleString() + "] \t" + msg_string
 }
 
 
