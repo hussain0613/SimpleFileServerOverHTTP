@@ -1,0 +1,52 @@
+#contents_table{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.content_icon{
+    width: 15px;
+    height: 15px;
+    margin: 0px 8px 0px 0px;
+    /* margin-right: 8px; */
+    display: inline-block;
+}
+
+
+.content_row:hover{
+    background-color: lightgrey;
+}
+
+th{
+    padding: 5px;
+    border-bottom: 1px solid darkgray;
+    text-align: start;
+}
+td{
+    padding: 5px;
+    border-bottom: 1px solid lightgray;
+}
+
+td>a, td>a:hover, td>a:active, td>a:visited{
+    display: inline-block;
+}
+a, a:hover, a:active, a:visited{
+    text-decoration: none;
+    color:black;
+    width: 100%;
+}
+
+#body{
+    padding: 20px;
+}
+
+.text_left_align{
+    text-align: left;
+}
+
+.text_center_align{
+    text-align: center;
+}
+
+.text_right_align{
+    text-align: right;
+}
