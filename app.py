@@ -100,7 +100,7 @@ def upload_files():
     if not os.path.isdir(dir_path):
         return {"status": "failed", "details": "Not in a directory"}
     
-    file_count: int = 1
+    file_count: int = 0
     total_size: float = 0.0
     try:
         for file in request.files.getlist("files"):
@@ -183,7 +183,7 @@ def index(dir_path: str = None):
 
 def create_app():
     app = Flask(__name__, template_folder="www", static_url_path="/statics", static_folder="www/statics")
-
+    if(settings.get("max_upload_content_length_MB")) != None: app.config["MAX_CONTENT_LENGTH"] = settings.get("max_upload_content_length_MB") * 1000 * 1000
     
     app.register_blueprint(bp)
 

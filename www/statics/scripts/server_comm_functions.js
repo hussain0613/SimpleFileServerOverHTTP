@@ -89,7 +89,7 @@ function upload_files(formdata){
                 }
             }else{
                 console.log("khaiso mara")
-                update_msg(msg_cnt2, "Server reply: "+ resp["details"])
+                update_msg(msg_cnt2, "Server reply: "+ this.status)
             }
         }
     }

@@ -7,7 +7,8 @@ def get_default_settings()->dict:
     "modify_permission": True,
     "host": "0.0.0.0",
     "port": 9921,
-    "debug": True
+    "debug": True,
+    "max_content_length_MB": None
 }
 
 
