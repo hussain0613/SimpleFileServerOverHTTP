@@ -4,9 +4,9 @@ function create_row(path, content){
     let img = document.createElement("img")
     img.classList.add("content_icon")
     if(content["is_directory"] == true){
-        img.src = "statics/res/folder.svg"
+        img.src = "/statics/res/folder.svg"
     }else {
-        img.src = "statics/res/download-file.svg"
+        img.src = "/statics/res/download-file.svg"
     }
     
     let a = document.createElement("a")
@@ -15,7 +15,6 @@ function create_row(path, content){
     a_innerText.innerText = content["name"]
 
     let td1 = document.createElement("td")
-    //td1.appendChild(img)
     a.appendChild(img)
     a.appendChild(a_innerText)
     td1.appendChild(a)
@@ -36,7 +35,7 @@ function create_row(path, content){
         let download_icon = document.createElement("img")
         download_icon.classList.add("content_icon")
         download_icon.classList.add("non_button_button")
-        download_icon.src = "statics/res/download.svg"
+        download_icon.src = "/statics/res/download.svg"
         download_icon.onclick = function(event){
             let msg_cnt = add_msg("preparing " + content["name"])
             // call download function
@@ -57,7 +56,7 @@ function create_row(path, content){
 }
 
 
-function render_tbody(){
+function render_tbody(contents){
     let contents_tbody = document.querySelector("#contents_table>tbody")
 
     contents_tbody.innerHTML = ""

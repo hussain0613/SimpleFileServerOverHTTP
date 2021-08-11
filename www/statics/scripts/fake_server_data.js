@@ -51,6 +51,6 @@ let data = {
 
 
 let permissions = {
-    "upload": true,
-    "create": true
+    "upload_permission": true,
+    "modify_permission": true
 }
