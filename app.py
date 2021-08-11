@@ -70,6 +70,14 @@ def download():
     return send_from_directory(directory=os.path.dirname(path), path=os.path.basename(path))
 
 
+@bp.route("/get_settings/")
+def get_settings():
+    resp = {"status": "success", "details": "fetched server settings"}
+    settings = read_settings()
+    resp["settings"] = settings
+    return resp
+
+
 @bp.route("/<path:dir_path>/")
 @bp.route("/")
 def index(dir_path: str = None):

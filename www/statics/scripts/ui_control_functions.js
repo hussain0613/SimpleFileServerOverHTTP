@@ -60,13 +60,8 @@ function render_tbody(data){
     let contents_tbody = document.querySelector("#contents_table>tbody")
 
     contents_tbody.innerHTML = ""
-    // hudai
-    if(data["parent_directory"] == null){
-        document.getElementById("current_directory_path_span").innerText = "root"
-    }else{
-        document.getElementById("current_directory_path_span").innerText = data["current_directory"]
-    }
-
+    document.getElementById("current_directory_path_span").innerText = data["current_directory"]
+    
     // actually rendering table
     if(data["parent_directory"] != null){
         create_row(data["parent_directory"], {"name": "Parent Directory", "is_directory": true})
