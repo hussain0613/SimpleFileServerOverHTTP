@@ -41,7 +41,7 @@ function get_settings(callBack){
                 }
             }else{
                 console.log("khaiso mara")
-                add_msg("error fetching contetns. http status: "+ this.status)
+                add_msg("error fetching settings. http status: "+ this.status)
             }
         }
     }
@@ -89,11 +89,39 @@ function upload_files(formdata){
                 }
             }else{
                 console.log("khaiso mara")
-                update_msg(msg_cnt2, "Server reply: "+ this.status)
+                update_msg(msg_cnt2, "error uploading files. http resp status: "+ this.status)
             }
         }
     }
 
     xhr.send(formdata)
+}
+
+
+
+function create_folder(new_folder_name, callBack){
+    // fetch settings from server and then call callBack
+    xhr = new XMLHttpRequest()
+    xhr.open("post", `/create_directory/?dir_path=${document.location.pathname}&new_dir_name=${new_folder_name}`, true)
+    xhr.onreadystatechange = function(){
+        if(this.readyState == 4){
+            if(this.status == 200){
+                resp = JSON.parse(this.responseText)
+                if(resp["status"] == "success"){
+                    //console.log(resp["data"])
+                    get_contents(callBack)
+                    add_msg(resp["details"])
+                }else{
+                    console.log(resp["details"])
+                    add_msg(resp["details"])
+                }
+            }else{
+                console.log("khaiso mara")
+                add_msg("error creating folder. http status: "+ this.status)
+            }
+        }
+    }
+
+    xhr.send()
 }
 

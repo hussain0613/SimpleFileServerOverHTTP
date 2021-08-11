@@ -31,7 +31,7 @@ function create_row(path, content){
     
     let td4 = document.createElement("td")
     td4.classList.add("text_right_align")
-    if(content["name"] != "Parent Directory"){
+    if(content["is_directory"] != true){ // will add directories here too hopefully
         let download_icon = document.createElement("img")
         download_icon.classList.add("content_icon")
         download_icon.classList.add("non_button_button")
@@ -173,12 +173,12 @@ function settings_dependent_tasks(settings){
         upload_files_toggle_btn.style.display = "inline"
         
     
-        let upload_folder_toggle_btn = document.querySelector("#actions_menu>button:nth-child(2)")
-        upload_folder_toggle_btn.style.display = "inline"
+        // let upload_folder_toggle_btn = document.querySelector("#actions_menu>button:nth-child(2)")
+        // upload_folder_toggle_btn.style.display = "inline"
         
     
-        let create_file_toggle_btn = document.querySelector("#actions_menu>button:nth-child(3)")
-        create_file_toggle_btn.style.display = "inline"
+        // let create_file_toggle_btn = document.querySelector("#actions_menu>button:nth-child(3)")
+        // create_file_toggle_btn.style.display = "inline"
         
     
         let create_folder_toggle_btn = document.querySelector("#actions_menu>button:nth-child(4)")

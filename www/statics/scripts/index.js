@@ -38,11 +38,8 @@ document.getElementById("create_file_btn").addEventListener("click", function(ev
 
 document.getElementById("create_folder_btn").addEventListener("click", function(event){
     event.preventDefault()
-    //also got to call server comm functions
-    add_msg("clicked for creating folder")
-    update_msg(message_count, "updated folder creation msg")
-    //fetch data again after the changes
-    get_contents(render_tbody)
+    create_folder(document.getElementById("folder_name").value, render_tbody)
+    
 })
 
 document.querySelector("#actions_menu>button:nth-child(3)").addEventListener("click", create_files_div_display_toggle_wrapper)
