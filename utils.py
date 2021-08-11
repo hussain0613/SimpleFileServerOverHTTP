@@ -24,3 +24,22 @@ def read_settings() -> dict:
 
     except (FileNotFoundError) as err:
         write_settings(get_default_settings())
+
+
+def get_human_readable_size(size_in_bytes):
+    n = size_in_bytes
+    suffix = "B"
+
+    if n/10.0**9.0 > 1.0:
+        n /= 10.0**9.0
+        suffix = "GB"
+    
+    elif n/10.0**6.0 > 1.0:
+        n /= 10.0**6.0
+        suffix = "MB"
+    elif n/10.0**3.0 > 1.0:
+        n /= 10.0**3.0
+        suffix = "KB"
+    
+    return f"{round(n, 2)}{suffix}"
+

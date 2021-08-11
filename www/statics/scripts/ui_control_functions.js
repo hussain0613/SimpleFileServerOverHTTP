@@ -61,7 +61,7 @@ function render_tbody(data){
 
     contents_tbody.innerHTML = ""
     // hudai
-    if(data["root_directory"] == data["current_directory"]){
+    if(data["parent_directory"] == null){
         document.getElementById("current_directory_path_span").innerText = "root"
     }else{
         document.getElementById("current_directory_path_span").innerText = data["current_directory"]
