@@ -83,6 +83,39 @@ def get_settings():
     return resp
 
 
+@bp.route("/upload_files/", methods=["POST"])
+def upload_files():
+
+    if settings.get("upload_permission") == False:
+        return {"status": "failed", "details": "Upload permission not granted"}
+
+    rdir = settings.get("shared_directory") # real path of root_directory
+    relative_path = request.args.get("dir_path") # relative path
+    dir_path = os.path.join(rdir, relative_path) # real path
+
+    if not os.path.exists(dir_path):
+        return {"status": "failed", "details": "Does not exist!"}
+    
+    if not os.path.isdir(dir_path):
+        return {"status": "failed", "details": "Not in a directory"}
+    
+    file_count: int = 1
+    total_size: float = 0.0
+    try:
+        for file in request.files.getlist("files"):
+            fn = file.filename
+            f_path = os.path.join(dir_path, fn.lstrip("/\\")) # real path
+            file.save(f_path)
+            file_count += 1
+            total_size += os.path.getsize(f_path)
+            file.close()
+            
+        return {"status": "success", "details": f"Files saved successfully. Total {get_human_readable_size(total_size)} - {file_count} files"}
+    except PermissionError as err:
+        return {"status": "failed", "details": "Writing permission denied!"}
+
+
+
 @bp.route("/<path:dir_path>/")
 @bp.route("/")
 def index(dir_path: str = None):

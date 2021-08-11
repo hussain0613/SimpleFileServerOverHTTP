@@ -9,11 +9,8 @@ document.getElementById("clear_msgs_buttion").addEventListener("click", clear_me
 document.querySelector("#actions_menu>button").addEventListener("click", upload_files_div_display_toggle_wrapper)
 document.getElementById("upload_files_btn").addEventListener("click", function(event){
     event.preventDefault()
-    //also got to call server comm functions
-    add_msg("clicked for upload files")
-    update_msg(message_count, "updated upload files msg")
-    //fetch data again after the changes
-    get_contents(render_tbody)
+    let formdata = new FormData(document.getElementById("upload_files_form"))
+    upload_files(formdata)
 })
 
 

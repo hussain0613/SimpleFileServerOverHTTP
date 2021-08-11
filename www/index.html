@@ -41,7 +41,7 @@
             <button id = "toggle_folder_create_btn" style="display: none;">Create Folder</button>
 
             <div id = "upload_files_div" style="display: none;">
-                <form action="">
+                <form action="/upload_files?dir_path=/" id = "upload_files_form" enctype="multipart/form-data">
                     <h4>Upload Files</h4>
                     <input type="file" name="files" id="files" multiple>
                     <input type="submit" value="Upload" id = "upload_files_btn">
