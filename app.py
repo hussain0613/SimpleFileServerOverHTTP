@@ -21,7 +21,7 @@ def get_contents():
     
     # checking whether it is actually a dir or not
     if not os.path.isdir(cdir):
-        return {"status": "failed", "details": "not a directory"}
+        return {"status": "failed", "details": "Not a directory!"}
 
     
 
@@ -33,26 +33,28 @@ def get_contents():
         data["parent_directory"] = os.path.dirname(dir_path.rstrip("/\\")) 
     
     contents = {}
-    #try:
-    fns = os.listdir(cdir) #folder or file names
-    for fn in fns:
-        details = {"name": fn}
-        real_path: str = os.path.join(cdir, fn)
-        stats = os.stat(real_path)
-        
-        isdir: bool = os.path.isdir(real_path)
-        details["is_directory"] = isdir
+    try:
+        fns = os.listdir(cdir) #folder or file names
+        for fn in fns:
+            details = {"name": fn}
+            real_path: str = os.path.join(cdir, fn)
+            stats = os.stat(real_path)
+            
+            isdir: bool = os.path.isdir(real_path)
+            details["is_directory"] = isdir
 
-        if isdir: details["size"] = "-"
-        else: details["size"] = get_human_readable_size(stats.st_size)
+            if isdir: details["size"] = "-"
+            else: details["size"] = get_human_readable_size(stats.st_size)
 
-        details["date"] = datetime.datetime.fromtimestamp(stats.st_ctime)     
+            details["date"] = datetime.datetime.fromtimestamp(stats.st_ctime)     
 
-        contents[os.path.join(dir_path, fn)] = details # key is the relative path
-    data["contents"] = contents
-    resp = {"status": "success", "details": "fetched all contents of the given directory"}
-    resp["data"] = data
-    return resp
+            contents[os.path.join(dir_path, fn)] = details # key is the relative path
+        data["contents"] = contents
+        resp = {"status": "success", "details": "Fetched all contents of the given directory."}
+        resp["data"] = data
+        return resp
+    except PermissionError as err:
+        return {"status": "failed", "details": "Permission Denied!"}
 
 
 @bp.route("/download/")
@@ -62,17 +64,20 @@ def download():
     path = os.path.join(rdir, relative_path) # real path
 
     if not os.path.exists(path):
-        return {"status": "failed", "details": "does not exist"}
+        return {"status": "failed", "details": "Does not exist!"}
     
     if os.path.isdir(path):
-        return {"status": "success", "details": "eita folder, so ashole successful na, pore kora hobe"}
+        return {"status": "success", "details": "Actually not successfull. Downloading folders' not available yet."}
     
-    return send_from_directory(directory=os.path.dirname(path), path=os.path.basename(path))
+    try:
+        return send_from_directory(directory=os.path.dirname(path), path=os.path.basename(path))
+    except PermissionError as err:
+        return {"status": "failed", "details": "Permission denied!"}
 
 
 @bp.route("/get_settings/")
 def get_settings():
-    resp = {"status": "success", "details": "fetched server settings"}
+    resp = {"status": "success", "details": "Fetched server settings."}
     settings = read_settings()
     resp["settings"] = settings
     return resp

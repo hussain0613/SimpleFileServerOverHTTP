@@ -36,11 +36,17 @@ function create_row(path, content){
         download_icon.classList.add("content_icon")
         download_icon.classList.add("non_button_button")
         download_icon.src = "/statics/res/download.svg"
-        download_icon.onclick = function(event){
-            let msg_cnt = add_msg("preparing " + content["name"])
-            // call download function
+        if(content["is_directory"] == true){
+            download_icon.onclick = function(event){
+                let msg_cnt = add_msg("Preparing " + path + "for download. It might take a while.")
+            }
         }
-        td4.appendChild(download_icon)
+
+        let aa = document.createElement("a")
+        aa.href = "/download?path=" + path
+        aa.appendChild(download_icon)
+
+        td4.appendChild(aa)
     }
 
     let row = document.createElement("tr")
@@ -120,6 +126,9 @@ function create_folder_div_display_toggle_wraper(){
 let message_count = 0
 
 function add_msg(msg_string){
+    document.getElementById("msg_div_display_toggle_btn").innerText = "Hide Messages"
+    document.getElementById("msg_div").style.display = "block"
+
     message_count += 1
 
     let msg_li = document.createElement("li")
@@ -131,6 +140,9 @@ function add_msg(msg_string){
 }
 
 function update_msg(msg_serial, msg_string){
+    document.getElementById("msg_div_display_toggle_btn").innerText = "Hide Messages"
+    document.getElementById("msg_div").style.display = "block"
+    
     let msg_li = document.getElementById("msg_"+msg_serial)
     msg_li.innerHTML = "[" +(new Date()).toLocaleString() + "] \t" + msg_string
 }
@@ -141,11 +153,11 @@ function toggle_msg_div_display(){
     let msg_div = document.getElementById("msg_div")
     if(msg_div.style.display == "none"){
         msg_div.style.display = "block"
-        document.getElementById("msg_div_display_toggle_btn").innerText = "Hide Messages"
+        msg_div_display_toggle_btn.innerText = "Hide Messages"
     }
     else {
         msg_div.style.display = "none"
-        document.getElementById("msg_div_display_toggle_btn").innerText = "Show Messages"
+        msg_div_display_toggle_btn.innerText = "Show Messages"
     }
 }
 
