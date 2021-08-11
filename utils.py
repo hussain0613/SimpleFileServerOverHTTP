@@ -8,7 +8,7 @@ def get_default_settings()->dict:
     "host": "0.0.0.0",
     "port": 9921,
     "debug": True,
-    "max_content_length_MB": None
+    "max_upload_content_length_MB": None
 }
 
 
