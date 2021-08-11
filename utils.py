@@ -11,14 +11,14 @@ def get_default_settings()->dict:
 
 
 def write_settings(settings: dict):
-    with open("settings.json", "w") as file:
+    with open("server_settings.json", "w") as file:
         file.write(json.dumps(settings))
 
 
 def read_settings() -> dict:
     data: str
     try:
-        with open("settings.json", "r") as file:
+        with open("server_settings.json", "r") as file:
             data = file.read()
         return json.loads(data)
 
