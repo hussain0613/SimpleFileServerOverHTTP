@@ -78,6 +78,7 @@ def download():
 @bp.route("/get_settings/")
 def get_settings():
     resp = {"status": "success", "details": "Fetched server settings."}
+    global settings
     settings = read_settings()
     resp["settings"] = settings
     return resp
@@ -104,13 +105,55 @@ def upload_files():
     try:
         for file in request.files.getlist("files"):
             fn = file.filename
+            
             f_path = os.path.join(dir_path, fn.lstrip("/\\")) # real path
+            
+            i = 2
+            temp = f_path[:]
+            while os.path.exists(temp):
+                temp = f"_{i}.".join(f_path.rsplit(".", maxsplit=2))
+                i += 1
+            f_path = temp
+            
             file.save(f_path)
             file_count += 1
             total_size += os.path.getsize(f_path)
             file.close()
             
         return {"status": "success", "details": f"Files saved successfully. Total {get_human_readable_size(total_size)} - {file_count} files"}
+    except PermissionError as err:
+        return {"status": "failed", "details": "Writing permission denied!"}
+    
+
+@bp.route("/create_directory/", methods=["POST"])
+def create_directory():
+
+    if settings.get("upload_permission") == False:
+        return {"status": "failed", "details": "Upload permission not granted"}
+
+    rdir = settings.get("shared_directory") # real path of root_directory
+    relative_path = request.args.get("dir_path") # relative path
+    new_dir_name = request.args.get("new_dir_name")
+    dir_path = os.path.join(rdir, relative_path.lstrip("/\\")) # real path
+
+    if not os.path.exists(dir_path):
+        return {"status": "failed", "details": "Does not exist!"}
+    
+    if not os.path.isdir(dir_path):
+        return {"status": "failed", "details": "Not in a directory"}
+      
+    try:
+        i: int = 2
+        full_path = os.path.join(dir_path, new_dir_name.lstrip("/\\"))
+        temp = full_path[:]
+        while os.path.exists(temp):
+            temp = full_path + "_" + str(i)
+            i += 1
+        full_path = temp
+
+        os.mkdir(full_path)
+
+        return {"status": "success", "details": f"Folder '{os.path.basename(full_path)}' created successfully."}
     except PermissionError as err:
         return {"status": "failed", "details": "Writing permission denied!"}
 
