@@ -1,12 +1,13 @@
-import json
+import json, os
 
 def get_default_settings()->dict:
     return {
-    "shared_directory": "D:/",
+    "shared_directory": os.path.expanduser("~"),
     "upload_permission": True,
     "modify_permission": True,
     "host": "0.0.0.0",
-    "port": 9921
+    "port": 9921,
+    "debug": True
 }
 
 

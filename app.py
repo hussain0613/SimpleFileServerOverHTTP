@@ -37,7 +37,7 @@ def get_contents():
         fns = os.listdir(cdir) #folder or file names
         for fn in fns:
             details = {"name": fn}
-            real_path: str = os.path.join(cdir, fn)
+            real_path: str = os.path.join(cdir, fn.lstrip("/\\"))
             stats = os.stat(real_path)
             
             isdir: bool = os.path.isdir(real_path)
@@ -48,7 +48,7 @@ def get_contents():
 
             details["date"] = datetime.datetime.fromtimestamp(stats.st_ctime)     
 
-            contents[os.path.join(dir_path, fn)] = details # key is the relative path
+            contents[os.path.join(dir_path, fn.lstrip("/\\"))] = details # key is the relative path
         data["contents"] = contents
         resp = {"status": "success", "details": "Fetched all contents of the given directory."}
         resp["data"] = data
@@ -61,7 +61,7 @@ def get_contents():
 def download():
     rdir = settings.get("shared_directory") # real path of root_directory
     relative_path = request.args.get("path") # relative path
-    path = os.path.join(rdir, relative_path) # real path
+    path = os.path.join(rdir, relative_path.lstrip("/\\")) # real path
 
     if not os.path.exists(path):
         return {"status": "failed", "details": "Does not exist!"}
@@ -91,7 +91,7 @@ def upload_files():
 
     rdir = settings.get("shared_directory") # real path of root_directory
     relative_path = request.args.get("dir_path") # relative path
-    dir_path = os.path.join(rdir, relative_path) # real path
+    dir_path = os.path.join(rdir, relative_path.lstrip("/\\")) # real path
 
     if not os.path.exists(dir_path):
         return {"status": "failed", "details": "Does not exist!"}
@@ -120,10 +120,10 @@ def upload_files():
 @bp.route("/")
 def index(dir_path: str = None):
     rdir = settings.get("shared_directory") # real path of root_directory
-    if dir_path == "" or dir_path == None:
-        dir_path = "/"
+    if dir_path == None:
+        dir_path = ""
 
-    cdir: str = os.path.join(rdir, dir_path) # real path of current_directory
+    cdir: str = os.path.join(rdir, dir_path.lstrip("/\\")) # real path of current_directory
 
     # checking whether it is actually a dir or not
     if os.path.isfile(cdir):
@@ -147,6 +147,3 @@ def create_app():
     return app
 
 
-
-if __name__ == "__main__":
-    create_app().run(host=settings["host"], port=settings["port"], debug=True)
