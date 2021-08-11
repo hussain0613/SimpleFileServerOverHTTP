@@ -50,7 +50,7 @@ let data = {
 }
 
 
-let permissions = {
+let settings = {
     "upload_permission": true,
     "modify_permission": true
 }

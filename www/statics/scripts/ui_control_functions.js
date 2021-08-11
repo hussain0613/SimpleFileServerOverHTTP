@@ -56,24 +56,24 @@ function create_row(path, content){
 }
 
 
-function render_tbody(contents){
+function render_tbody(data){
     let contents_tbody = document.querySelector("#contents_table>tbody")
 
     contents_tbody.innerHTML = ""
     // hudai
-    if(rdir == cdir){
+    if(data["root_directory"] == data["current_directory"]){
         document.getElementById("current_directory_path_span").innerText = "root"
     }else{
         document.getElementById("current_directory_path_span").innerText = data["current_directory"]
     }
 
     // actually rendering table
-    if(pdir != null){
-        create_row(pdir, {"name": "Parent Directory", "is_directory": true})
+    if(data["parent_directory"] != null){
+        create_row(data["parent_directory"], {"name": "Parent Directory", "is_directory": true})
     }
 
-    for (let key in contents){
-        create_row(key, contents[key])
+    for (let key in data["contents"]){
+        create_row(key, data["contents"][key])
     }
 }
 
@@ -156,6 +156,27 @@ function toggle_msg_div_display(){
 
 function clear_messages(){
     document.getElementById("msg_ul").innerHTML = ""
+}
+
+
+
+function settings_dependent_tasks(settings){
+    if(settings["upload_permission"] == true){
+        let upload_files_toggle_btn = document.querySelector("#actions_menu>button")
+        upload_files_toggle_btn.style.display = "inline"
+        
+    
+        let upload_folder_toggle_btn = document.querySelector("#actions_menu>button:nth-child(2)")
+        upload_folder_toggle_btn.style.display = "inline"
+        
+    
+        let create_file_toggle_btn = document.querySelector("#actions_menu>button:nth-child(3)")
+        create_file_toggle_btn.style.display = "inline"
+        
+    
+        let create_folder_toggle_btn = document.querySelector("#actions_menu>button:nth-child(4)")
+        create_folder_toggle_btn.style.display = "inline"
+    }
 }
 
 
