@@ -175,8 +175,8 @@ def create_directory():
 
 
 
-@bp.route("/<path:dir_path>/")
-@bp.route("/")
+@bp.route("/fs/<path:dir_path>/")
+@bp.route("/fs/")
 def index(dir_path: str = None):
     rdir = settings.get("shared_directory") # real path of root_directory
     if dir_path == None:
@@ -193,6 +193,10 @@ def index(dir_path: str = None):
     
     return render_template("index.html")
 
+
+@bp.route("/")
+def redirect_to_index():
+    return redirect(url_for("main.index", dir_path = ""))
 
 
 

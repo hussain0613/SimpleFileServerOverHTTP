@@ -10,7 +10,7 @@ function create_row(path, content){
     }
     
     let a = document.createElement("a")
-    a.href = path
+    a.href = "/fs/"+path
     let a_innerText = document.createElement("span")
     a_innerText.innerText = content["name"]
 
