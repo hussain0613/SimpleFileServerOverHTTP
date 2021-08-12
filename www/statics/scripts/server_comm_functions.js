@@ -121,7 +121,32 @@ function create_folder(new_folder_name, callBack){
             }
         }
     }
-
     xhr.send()
 }
 
+
+function get_search_result(query, dir_path){
+    add_msg(`searching for ${query} in ${dir_path}... might take a while`)
+    let msg_cnt = add_msg("server reply: ")
+    xhr = new XMLHttpRequest()
+    xhr.open("get", `/get_search_result/?query=${query}&dir_path=${dir_path}`, true)
+    xhr.onreadystatechange = function(){
+        if(this.readyState == 4){
+            if(this.status == 200){
+                resp = JSON.parse(this.responseText)
+                if(resp["status"] == "success"){
+                    //console.log(resp["data"])
+                    render_tbody(resp["data"])
+                    update_msg(msg_cnt, "server reply: " + resp["details"])
+                }else{
+                    console.log(resp["details"])
+                    update_msg(msg_cnt, "server reply: " + resp["details"])
+                }
+            }else{
+                console.log("khaiso mara")
+                update_msg(msg_cnt, "error creating folder. http status: " + this.status)
+            }
+        }
+    }
+    xhr.send()
+}

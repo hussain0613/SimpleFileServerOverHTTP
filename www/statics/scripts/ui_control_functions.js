@@ -38,7 +38,7 @@ function create_row(path, content){
         download_icon.src = "/statics/res/download.svg"
         if(content["is_directory"] == true){
             download_icon.onclick = function(event){
-                let msg_cnt = add_msg("Preparing " + path + "for download. It might take a while.")
+                add_msg("Preparing " + path + "for download. It might take a while.")
             }
         }
 
@@ -47,6 +47,14 @@ function create_row(path, content){
         aa.appendChild(download_icon)
 
         td4.appendChild(aa)
+    }
+
+    if (content["directory"] != null){
+        let dir_a = document.createElement("a")
+        dir_a.innerText = "[visit dir]"
+        dir_a.href = "/fs/" + content["directory"]
+        
+        td4.appendChild(dir_a)
     }
 
     let row = document.createElement("tr")
@@ -186,4 +194,16 @@ function settings_dependent_tasks(settings){
     }
 }
 
+
+function on_search(event){
+    event.preventDefault()
+    let query = document.getElementById("search_query_field").value
+    let is_full = document.getElementById("search_checkbox").checked
+    let dir_path = "/"
+    console.log(is_full)
+    if(is_full === false) dir_path = document.location.pathname.substring(3)
+
+    get_search_result(query, dir_path)
+
+}
 

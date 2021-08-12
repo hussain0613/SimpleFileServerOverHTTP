@@ -45,3 +45,5 @@ document.getElementById("create_folder_btn").addEventListener("click", function(
 document.querySelector("#actions_menu>button:nth-child(3)").addEventListener("click", create_files_div_display_toggle_wrapper)
 document.querySelector("#actions_menu>button:nth-child(4)").addEventListener("click", create_folder_div_display_toggle_wraper)
 
+
+document.getElementById("search_form").addEventListener("submit", on_search)
