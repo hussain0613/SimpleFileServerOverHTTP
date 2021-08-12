@@ -119,7 +119,11 @@ def upload_files():
             i = 2
             temp = f_path[:]
             while os.path.exists(temp):
-                temp = f"_{i}.".join(f_path.rsplit(".", maxsplit=2))
+                if "." in fn:
+                    temp = f"_{i}.".join(f_path.rsplit(".", maxsplit=2))
+                else:
+                    temp = f"{f_path}_{i}"
+                
                 i += 1
             f_path = temp
             
