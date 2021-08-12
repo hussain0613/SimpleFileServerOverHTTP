@@ -19,4 +19,4 @@ people can view, search, download and upload files under the root directory
 
 * default host is "0.0.0.0" and port is 9921
 * running server on the default host and port might not be allowed in all devices, then take steps accordingly
-* if host and port are set to default, you can visit http://<yourdeviceip>:9921 from any connected devices to reash the file server
+* if host and port are set to default, you can visit http://yourdeviceip:9921 from any connected devices to reach the file server
