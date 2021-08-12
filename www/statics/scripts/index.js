@@ -7,36 +7,36 @@ document.getElementById("clear_msgs_buttion").addEventListener("click", clear_me
 
 
 document.querySelector("#actions_menu>button").addEventListener("click", upload_files_div_display_toggle_wrapper)
-document.getElementById("upload_files_btn").addEventListener("click", function(event){
+document.getElementById("upload_files_form").addEventListener("submit", function(event){
     event.preventDefault()
     let formdata = new FormData(document.getElementById("upload_files_form"))
     upload_files(formdata)
 })
 
 
-document.querySelector("#actions_menu>button:nth-child(2)").addEventListener("click", upload_folder_div_display_toggle_wrapper)
+// document.querySelector("#actions_menu>button:nth-child(2)").addEventListener("click", upload_folder_div_display_toggle_wrapper)
     
-document.getElementById("upload_folder_btn").addEventListener("click", function(event){
-    event.preventDefault()
-    //also got to call server comm functions
-    add_msg("clicked for upload folder")
-    update_msg(message_count, "updated upload folder msg")
-    //fetch data again after the changes
-    get_contents(render_tbody)
-})
+// document.getElementById("upload_folder_btn").addEventListener("click", function(event){
+//     event.preventDefault()
+//     //also got to call server comm functions
+//     add_msg("clicked for upload folder")
+//     update_msg(message_count, "updated upload folder msg")
+//     //fetch data again after the changes
+//     get_contents(render_tbody)
+// })
 
 
-document.getElementById("create_file_btn").addEventListener("click", function(event){
-    event.preventDefault()
-    //also got to call server comm functions
-    add_msg("clicked for creating file")
-    update_msg(message_count, "updated file creation msg")
-    //fetch data again after the changes
-    get_contents(render_tbody)
-})
+// document.getElementById("create_file_btn").addEventListener("click", function(event){
+//     event.preventDefault()
+//     //also got to call server comm functions
+//     add_msg("clicked for creating file")
+//     update_msg(message_count, "updated file creation msg")
+//     //fetch data again after the changes
+//     get_contents(render_tbody)
+// })
 
 
-document.getElementById("create_folder_btn").addEventListener("click", function(event){
+document.getElementById("create_folder_form").addEventListener("submit", function(event){
     event.preventDefault()
     create_folder(document.getElementById("folder_name").value, render_tbody)
     

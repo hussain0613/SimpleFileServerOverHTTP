@@ -44,7 +44,7 @@
             <div id = "upload_files_div" style="display: none;">
                 <form action="/upload_files?dir_path=/" id = "upload_files_form" enctype="multipart/form-data">
                     <h4>Upload Files</h4>
-                    <input type="file" name="files" id="files" multiple>
+                    <input type="file" name="files" id="files" multiple required>
                     <input type="submit" value="Upload" id = "upload_files_btn">
                 </form>
             </div>
@@ -66,9 +66,9 @@
             </div>
             
             <div id = "create_folder_div" style="display: none;">
-                <form action="">
+                <form action="" id = "create_folder_form">
                     <h4>Create Folder</h4>
-                    <input type="text" name="folder_name" id="folder_name" placeholder="folder_name">
+                    <input type="text" name="folder_name" id="folder_name" placeholder="folder name" required>
                     <input type="submit" value="Create" id = "create_folder_btn">
                 </form>
             </div>
