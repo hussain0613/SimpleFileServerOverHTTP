@@ -1,6 +1,7 @@
 function create_row(path, content){
     //let content = contents[key]
-    
+    if(path[0] != "/" && path[0] != "\\") path = "/" + path 
+
     let img = document.createElement("img")
     img.classList.add("content_icon")
     if(content["is_directory"] == true){
@@ -10,7 +11,7 @@ function create_row(path, content){
     }
     
     let a = document.createElement("a")
-    a.href = "/fs/"+path
+    a.href = "/fs" + path
     let a_innerText = document.createElement("span")
     a_innerText.innerText = content["name"]
 
@@ -52,7 +53,7 @@ function create_row(path, content){
     if (content["directory"] != null){
         let dir_a = document.createElement("a")
         dir_a.innerText = "[visit dir]"
-        dir_a.href = "/fs/" + content["directory"]
+        dir_a.href = (content["directory"][0] == "/" || content["directory"][0] == "\\")? `/fs${content["directory"]}` : `/fs/${content["directory"]}`
         
         td4.appendChild(dir_a)
     }
