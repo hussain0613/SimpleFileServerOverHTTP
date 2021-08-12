@@ -177,21 +177,24 @@ function clear_messages(){
 
 
 function settings_dependent_tasks(settings){
+    let upload_files_toggle_btn = document.querySelector("#actions_menu>button")
+
+    // let upload_folder_toggle_btn = document.querySelector("#actions_menu>button:nth-child(2)")
+
+    // let create_file_toggle_btn = document.querySelector("#actions_menu>button:nth-child(3)")
+
+    let create_folder_toggle_btn = document.querySelector("#actions_menu>button:nth-child(4)")
+
     if(settings["upload_permission"] == true){
-        let upload_files_toggle_btn = document.querySelector("#actions_menu>button")
         upload_files_toggle_btn.style.display = "inline"
-        
-    
-        // let upload_folder_toggle_btn = document.querySelector("#actions_menu>button:nth-child(2)")
         // upload_folder_toggle_btn.style.display = "inline"
-        
-    
-        // let create_file_toggle_btn = document.querySelector("#actions_menu>button:nth-child(3)")
         // create_file_toggle_btn.style.display = "inline"
-        
-    
-        let create_folder_toggle_btn = document.querySelector("#actions_menu>button:nth-child(4)")
         create_folder_toggle_btn.style.display = "inline"
+    }else{
+        upload_files_toggle_btn.style.display = "none"
+        // upload_folder_toggle_btn.style.display = "none"
+        // create_file_toggle_btn.style.display = "none"
+        create_folder_toggle_btn.style.display = "none"
     }
 }
 

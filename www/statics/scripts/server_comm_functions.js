@@ -138,6 +138,7 @@ function get_search_result(query, dir_path){
                     //console.log(resp["data"])
                     render_tbody(resp["data"])
                     update_msg(msg_cnt, "server reply: " + resp["details"])
+                    settings_dependent_tasks({"upload_permission": false})
                 }else{
                     console.log(resp["details"])
                     update_msg(msg_cnt, "server reply: " + resp["details"])
