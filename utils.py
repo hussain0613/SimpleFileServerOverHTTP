@@ -1,4 +1,4 @@
-import json, os
+import json, os, datetime
 
 def get_default_settings()->dict:
     return {
@@ -12,7 +12,7 @@ def get_default_settings()->dict:
 }
 
 
-def write_settings(settings: dict):
+def write_settings(settings: dict) -> None:
     with open("server_settings.json", "w") as file:
         file.write(json.dumps(settings))
 
@@ -28,7 +28,7 @@ def read_settings() -> dict:
         write_settings(get_default_settings())
 
 
-def get_human_readable_size(size_in_bytes):
+def get_human_readable_size(size_in_bytes) -> str:
     n = size_in_bytes
     suffix = "B"
 
@@ -44,4 +44,35 @@ def get_human_readable_size(size_in_bytes):
         suffix = "KB"
     
     return f"{round(n, 2)}{suffix}"
+
+def run_fast_scandir(query: str, contents: dict, cdir: str, rdir: str) -> list[str]:    # dir: str, ext: list
+    """
+    gives contents in the passed contents,
+    a modified version of the code given in this answer: https://stackoverflow.com/a/59803793
+    """
+    subfolders = []
+    try:
+        for f in os.scandir(cdir):
+            if f.is_dir():
+                subfolders.append(f.path)
+            if f.is_file():
+                if query.lower() in f.name.lower():
+                    #files.append((f.name, f.path))
+                    dets = {}
+                    dets["name"] = f.name
+                    stats = os.stat(f.path)
+                    dets["size"] = get_human_readable_size(stats.st_size)
+                    dets["time"] = datetime.datetime.fromtimestamp(stats.st_ctime)
+                    rel_path = f.path[len(rdir.rstrip("/\\")):] # relative to root_directory
+                    dets["directory"] = os.path.dirname(rel_path)
+                    contents[rel_path] = dets
+    except PermissionError as err:
+        pass
+    
+    for dir in list(subfolders):
+        sf = run_fast_scandir(query, contents, dir, rdir)
+        subfolders.extend(sf)
+        #files.extend(f)
+    return subfolders
+
 

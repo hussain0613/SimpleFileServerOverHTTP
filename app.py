@@ -1,4 +1,4 @@
-from utils import read_settings, get_human_readable_size
+from utils import read_settings, get_human_readable_size, run_fast_scandir
 settings = read_settings()
 
 import os, datetime
@@ -172,6 +172,44 @@ def create_directory():
         return {"status": "success", "details": f"Folder '{os.path.basename(full_path)}' created successfully."}
     except PermissionError as err:
         return {"status": "failed", "details": "Writing permission denied!"}
+
+
+
+@bp.route("/get_search_result/")
+def get_search_result():
+    query = request.args.get("query")
+    if(query == None):
+        return {"status": "faield", "details": "no query given"}
+
+    rdir: str = settings.get("shared_directory") # real path of root_directory
+    dir_path: str = rdir
+    
+    relative_path: str = request.args.get("dir_path") # relative path
+    
+    if(relative_path != None): 
+        dir_path = os.path.join(rdir, relative_path.lstrip("/\\")) # real path
+
+        if not os.path.exists(dir_path):
+            return {"status": "failed", "details": "given directory does not exist!"}
+    
+        if not os.path.isdir(dir_path):
+            return {"status": "failed", "details": "given directory is not a directory"}
+
+    data = {"current_directory": f"search result for '{query}'"}
+    
+    data["parent_directory"] = None
+    
+    contents = {}
+    try:
+        run_fast_scandir(query, contents, dir_path, rdir.rstrip("/\\"))
+        
+        data["contents"] = contents
+        resp = {"status": "success", "details": f"fetched search result for '{query}'. *note: the search result might not show all the files matching the query"}
+        resp["data"] = data
+        return resp
+    except PermissionError as err:
+        return {"status": "failed", "details": "Permission Denied!"}
+
 
 
 
