@@ -61,6 +61,10 @@ def get_contents():
 def download():
     rdir = settings.get("shared_directory") # real path of root_directory
     relative_path = request.args.get("path") # relative path
+    
+    if(relative_path == None): 
+        return {"status": "failed", "details": "no file given"}
+
     path = os.path.join(rdir, relative_path.lstrip("/\\")) # real path
 
     if not os.path.exists(path):
@@ -92,6 +96,10 @@ def upload_files():
 
     rdir = settings.get("shared_directory") # real path of root_directory
     relative_path = request.args.get("dir_path") # relative path
+    
+    if(relative_path == None): 
+        return {"status": "failed", "details": "no directory given"}
+    
     dir_path = os.path.join(rdir, relative_path.lstrip("/\\")) # real path
 
     if not os.path.exists(dir_path):
@@ -133,7 +141,15 @@ def create_directory():
 
     rdir = settings.get("shared_directory") # real path of root_directory
     relative_path = request.args.get("dir_path") # relative path
+
+    if(relative_path == None): 
+        return {"status": "failed", "details": "no direcoty given"}
+
     new_dir_name = request.args.get("new_dir_name")
+
+    if(new_dir_name == None): 
+        return {"status": "failed", "details": "no new directory name given given"}
+
     dir_path = os.path.join(rdir, relative_path.lstrip("/\\")) # real path
 
     if not os.path.exists(dir_path):
