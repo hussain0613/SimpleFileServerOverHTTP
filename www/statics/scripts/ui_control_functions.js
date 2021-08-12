@@ -204,7 +204,7 @@ function on_search(event){
     let query = document.getElementById("search_query_field").value
     let is_full = document.getElementById("search_checkbox").checked
     let dir_path = "/"
-    console.log(is_full)
+    
     if(is_full === false) dir_path = document.location.pathname.substring(3)
 
     get_search_result(query, dir_path)

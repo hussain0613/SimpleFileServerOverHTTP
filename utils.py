@@ -55,17 +55,23 @@ def run_fast_scandir(query: str, contents: dict, cdir: str, rdir: str) -> list[s
         for f in os.scandir(cdir):
             if f.is_dir():
                 subfolders.append(f.path)
-            if f.is_file():
-                if query.lower() in f.name.lower():
-                    #files.append((f.name, f.path))
-                    dets = {}
-                    dets["name"] = f.name
-                    stats = os.stat(f.path)
+            
+            if query.lower() in f.name.lower():
+                dets = {}
+                dets["name"] = f.name
+                stats = os.stat(f.path)
+                dets["date"] = datetime.datetime.fromtimestamp(stats.st_ctime)
+                rel_path = f.path[len(rdir.rstrip("/\\")):] # relative to root_directory
+                dets["directory"] = os.path.dirname(rel_path)
+                contents[rel_path] = dets
+                if f.is_dir():
+                    subfolders.append(f.path)
+                    dets["is_directory"] = True
+                    dets["size"] = "-"
+                if f.is_file():
+                    dets["is_directory"] = False
                     dets["size"] = get_human_readable_size(stats.st_size)
-                    dets["time"] = datetime.datetime.fromtimestamp(stats.st_ctime)
-                    rel_path = f.path[len(rdir.rstrip("/\\")):] # relative to root_directory
-                    dets["directory"] = os.path.dirname(rel_path)
-                    contents[rel_path] = dets
+                    #files.append((f.name, f.path))
     except PermissionError as err:
         pass
     
