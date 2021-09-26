@@ -110,6 +110,8 @@ def upload_files():
     
     file_count: int = 0
     total_size: float = 0.0
+    download_urls: list[str] = []
+
     try:
         for file in request.files.getlist("files"):
             fn = file.filename
@@ -131,8 +133,11 @@ def upload_files():
             file_count += 1
             total_size += os.path.getsize(f_path)
             file.close()
+
+            relative_path_to_file: str = os.path.join(relative_path.lstrip('/\\'), os.path.split(f_path)[-1])
+            download_urls.append(url_for("main.download", _external=True) + f"?path={relative_path_to_file}")
             
-        return {"status": "success", "details": f"Files saved successfully. Total {get_human_readable_size(total_size)} - {file_count} files"}
+        return {"status": "success", "details": f"Files saved successfully. Total {get_human_readable_size(total_size)} - {file_count} files", "urls": download_urls}
     except PermissionError as err:
         return {"status": "failed", "details": "Writing permission denied!"}
     
