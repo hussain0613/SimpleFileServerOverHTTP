@@ -14,18 +14,19 @@ def get_default_settings()->dict:
 
 def write_settings(settings: dict) -> None:
     with open("server_settings.json", "w") as file:
-        file.write(json.dumps(settings))
+        json.dump(settings, file, indent=4)
 
 
 def read_settings() -> dict:
-    data: str
+    settings: dict
     try:
         with open("server_settings.json", "r") as file:
-            data = file.read()
-        return json.loads(data)
+            settings = json.load(file)
+        return settings
 
     except (FileNotFoundError) as err:
         write_settings(get_default_settings())
+        return read_settings()
 
 
 def get_human_readable_size(size_in_bytes) -> str:
