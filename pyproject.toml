@@ -1,0 +1,16 @@
+[project]
+name = "SimpleFileServerOverHTTP"
+version = "3.0.0-beta.1"
+description = "A simple files server over HTTP, written in Python with FastAPI"
+requires-python=">=3.13"
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "pydantic",
+    "jinja2",
+    "python-multipart"
+]
+
+[tool.setuptools.packages.find]
+include = ["modules/*"]
+exclude = ["www/*"]

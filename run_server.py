@@ -1,6 +1,12 @@
-from app import create_app, settings
-
 if __name__ == "__main__":
-    app = create_app()
-    app.run(host=settings.get("host"), port=settings.get("port"), debug=settings.get("debug"))
+    import uvicorn
+
+    from settings import settings
+
+    uvicorn.run(
+        "main:app",
+        host=settings.host,
+        port=settings.port,
+        reload=settings.debug
+    )
 
