@@ -1,3 +1,4 @@
+import asyncio
 import datetime
 import os
 
@@ -89,3 +90,36 @@ async def download_file(path: str) -> FileResponse:
         )
     except PermissionError as err:
         return {"status": "failed", "details": "Permission denied!"}
+
+
+async def search(query: str, dir_path: str) -> schemas.ContentsResponse:
+    if(query == None):
+        return {"status": "faield", "details": "no query given"}
+
+    root_dir: str = settings.shared_directory # real path of root_directory
+    search_dir: str = root_dir
+    
+    if(dir_path != None): # dir path is the relative path of the search dir from root dir
+        search_dir = os.path.join(root_dir, dir_path.lstrip("/\\")) # real path
+
+        if not os.path.exists(search_dir):
+            return {"status": "failed", "details": "given directory does not exist!"}
+    
+        if not os.path.isdir(search_dir):
+            return {"status": "failed", "details": "given directory is not a directory"}
+
+    data = {"current_directory": f"search result for '{query}'"}
+    
+    data["parent_directory"] = None
+    
+    contents = {}
+    try:
+        await asyncio.to_thread(controllers.run_fast_scandir, query, contents, search_dir, root_dir.rstrip("/\\"))
+        # controllers.run_fast_scandir(query, contents, search_dir, root_dir.rstrip("/\\"))
+        
+        data["contents"] = contents
+        resp = {"status": "success", "details": f"fetched search result for '{query}'. *note: the search result might not show all the files matching the query"}
+        resp["data"] = data
+        return resp
+    except PermissionError as err:
+        return {"status": "failed", "details": "Permission Denied!"}

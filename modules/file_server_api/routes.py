@@ -25,3 +25,10 @@ router.add_api_route(
     methods=["GET"],
     name="download_file"
 )
+
+router.add_api_route(
+    "/search/",
+    endpoint=endpoints.search,
+    methods=["GET"],
+    name="search"
+)

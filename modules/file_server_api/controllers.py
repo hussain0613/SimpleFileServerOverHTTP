@@ -19,14 +19,14 @@ def get_human_readable_size(size_in_bytes) -> str:
     return f"{round(n, 2)}{suffix}"
 
 
-def run_fast_scandir(query: str, contents: dict, cdir: str, rdir: str) -> list[str]:    # dir: str, ext: list
+def run_fast_scandir(query: str, contents: dict, current_dir: str, root_dir: str) -> list[str]:    # dir: str, ext: list
     """
     gives contents in the passed contents,
     a modified version of the code given in this answer: https://stackoverflow.com/a/59803793
     """
     subfolders = []
     try:
-        for f in os.scandir(cdir):
+        for f in os.scandir(current_dir):
             if f.is_dir():
                 subfolders.append(f.path)
             
@@ -35,7 +35,7 @@ def run_fast_scandir(query: str, contents: dict, cdir: str, rdir: str) -> list[s
                 dets["name"] = f.name
                 stats = os.stat(f.path)
                 dets["date"] = datetime.datetime.fromtimestamp(stats.st_ctime)
-                rel_path = f.path[len(rdir.rstrip("/\\")):] # relative to root_directory
+                rel_path = f.path[len(root_dir.rstrip("/\\")):] # relative to root_directory
                 dets["directory"] = os.path.dirname(rel_path)
                 contents[rel_path] = dets
                 if f.is_dir():
@@ -50,7 +50,7 @@ def run_fast_scandir(query: str, contents: dict, cdir: str, rdir: str) -> list[s
         pass
     
     for dir in list(subfolders):
-        sf = run_fast_scandir(query, contents, dir, rdir)
+        sf = run_fast_scandir(query, contents, dir, root_dir)
         subfolders.extend(sf)
         #files.extend(f)
     return subfolders

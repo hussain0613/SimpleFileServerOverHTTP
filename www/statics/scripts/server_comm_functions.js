@@ -129,7 +129,7 @@ function get_search_result(query, dir_path){
     add_msg(`searching for ${query} in ${dir_path}... might take a while`)
     let msg_cnt = add_msg("server reply: ")
     xhr = new XMLHttpRequest()
-    xhr.open("get", `/get_search_result/?query=${query}&dir_path=${dir_path}`, true)
+    xhr.open("get", `/api/search/?query=${query}&dir_path=${dir_path}`, true)
     xhr.onreadystatechange = function(){
         if(this.readyState == 4){
             if(this.status == 200){
