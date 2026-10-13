@@ -18,3 +18,10 @@ router.add_api_route(
     methods=["GET"],
     name="get_contents"
 )
+
+router.add_api_route(
+    "/download/",
+    endpoint=endpoints.download_file,
+    methods=["GET"],
+    name="download_file"
+)

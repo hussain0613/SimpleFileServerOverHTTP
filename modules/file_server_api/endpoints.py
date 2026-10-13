@@ -1,6 +1,8 @@
 import datetime
 import os
 
+from fastapi.responses import FileResponse
+
 from settings import settings
 
 import modules.file_server_api.schemas as schemas
@@ -61,3 +63,29 @@ async def get_contents(dir_path: str | None = None) -> schemas.ContentsResponse:
     except PermissionError as err:
         return {"status": "failed", "details": "Permission Denied!"}
 
+
+
+async def download_file(path: str) -> FileResponse:
+    root_dir = settings.shared_directory # real path of root_directory
+    
+    relative_path = path
+    if(relative_path == None): 
+        return {"status": "failed", "details": "no file given"}
+
+    real_path = os.path.join(root_dir, relative_path.lstrip("/\\")) # real path
+
+    if not os.path.exists(real_path):
+        return {"status": "failed", "details": "Does not exist!"}
+    
+    if os.path.isdir(real_path):
+        return {"status": "success", "details": "Actually not successfull. Downloading folders' not available yet."}
+
+    filename = os.path.basename(real_path)
+    
+    try:
+        return FileResponse(
+            path=real_path,
+            filename=filename
+        )
+    except PermissionError as err:
+        return {"status": "failed", "details": "Permission denied!"}

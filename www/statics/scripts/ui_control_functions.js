@@ -44,7 +44,7 @@ function create_row(path, content){
         }
 
         let aa = document.createElement("a")
-        aa.href = "/download?path=" + path
+        aa.href = "/api/download?path=" + path
         aa.appendChild(download_icon)
 
         td4.appendChild(aa)

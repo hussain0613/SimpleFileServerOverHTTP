@@ -21,7 +21,7 @@ async def file_server_ui(request: Request, dir_path: str | None = None) -> HTMLR
     # checking whether it is actually a dir or not
     if os.path.isfile(current_dir):
         return RedirectResponse(
-            request.url_for("file_server.download", path=dir_path)
+            request.url_for("download_file").include_query_params(path=dir_path)
         )
     
     if not os.path.isdir(current_dir):
