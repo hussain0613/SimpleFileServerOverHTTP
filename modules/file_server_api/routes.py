@@ -2,7 +2,7 @@ from fastapi import APIRouter
 
 import modules.file_server_api.endpoints as endpoints
 
-router = APIRouter(prefix="", tags=["file-server-api"])
+router = APIRouter(prefix="/api", tags=["file-server-api"])
 
 
 router.add_api_route(
