@@ -1,7 +1,7 @@
 function get_contents(callBack){
     // fetch contents from server and then call callback
     xhr = new XMLHttpRequest()
-    xhr.open("get", "/get_contents/?dir_path="+document.location.pathname.substring(3), true)
+    xhr.open("get", "/api/contents/?dir_path="+document.location.pathname.substring(3), true)
     xhr.onreadystatechange = function(){
         if(this.readyState == 4){
             if(this.status == 200){
@@ -27,7 +27,7 @@ function get_contents(callBack){
 function get_settings(callBack){
     // fetch settings from server and then call callBack
     xhr = new XMLHttpRequest()
-    xhr.open("get", "/get_settings/", true)
+    xhr.open("get", "/api/settings/", true)
     xhr.onreadystatechange = function(){
         if(this.readyState == 4){
             if(this.status == 200){
