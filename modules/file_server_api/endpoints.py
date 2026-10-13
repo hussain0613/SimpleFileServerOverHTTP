@@ -2,7 +2,7 @@ import asyncio
 import datetime
 import os
 
-from fastapi import File, UploadFile
+from fastapi import UploadFile
 from fastapi.responses import FileResponse
 
 from settings import settings
@@ -47,7 +47,12 @@ async def get_contents(dir_path: str | None = None) -> schemas.ContentsResponse:
         for fn in fns:
             details = {"name": fn}
             real_path: str = os.path.join(current_dir, fn.lstrip("/\\"))
-            stats = os.stat(real_path)
+            try:
+                stats = os.stat(real_path)
+            except FileNotFoundError:
+                # Can happend for broken symlinks!
+                # stats = os.lstat(real_path) # will get the stas for the symlink instead of the actual file
+                continue
             
             isdir: bool = os.path.isdir(real_path)
             details["is_directory"] = isdir
