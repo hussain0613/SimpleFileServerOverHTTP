@@ -2,6 +2,7 @@ import asyncio
 import datetime
 import os
 
+from fastapi import File, UploadFile
 from fastapi.responses import FileResponse
 
 from settings import settings
@@ -123,3 +124,74 @@ async def search(query: str, dir_path: str) -> schemas.ContentsResponse:
         return resp
     except PermissionError as err:
         return {"status": "failed", "details": "Permission Denied!"}
+
+
+async def upload_files(dir_path: str, files: list[UploadFile]) -> schemas.BaseResponse:
+    if settings.upload_permission == False:
+        return {"status": "failed", "details": "Upload permission not granted"}
+
+    root_dir = settings.shared_directory # real path of root_directory
+    
+    if(dir_path == None): # `dir_path` is the relative path of the dir
+        return {"status": "failed", "details": "no directory given"}
+    
+    abs_dir_path = os.path.join(root_dir, dir_path.lstrip("/\\")) # real/absolute path
+
+    if not os.path.exists(abs_dir_path):
+        return {"status": "failed", "details": "Does not exist!"}
+    
+    if not os.path.isdir(abs_dir_path):
+        return {"status": "failed", "details": "Not in a directory"}
+    
+    file_count: int = 0
+    total_size: float = 0.0
+    try:
+        for file in files:
+            file_path = os.path.join(abs_dir_path, file.filename.lstrip("/\\")) # real path
+
+            file_path = await asyncio.to_thread(controllers.save_file, file_path, file.file)
+
+            file_count += 1
+            total_size += os.path.getsize(file_path)
+            await file.close()
+
+        return {"status": "success", "details": f"Files saved successfully. Total {controllers.get_human_readable_size(total_size)} - {file_count} files"}
+    except PermissionError as err:
+        return {"status": "failed", "details": "Writing permission denied!"}
+
+
+async def create_directory(new_dir_name: str, dir_path: str) -> schemas.BaseResponse:
+    if settings.upload_permission == False:
+        return {"status": "failed", "details": "Upload permission not granted"}
+
+    root_dir = settings.shared_directory # real path of root_directory
+
+    if(dir_path == None): 
+        return {"status": "failed", "details": "no direcoty given"}
+
+
+    if(new_dir_name == None): 
+        return {"status": "failed", "details": "no new directory name given given"}
+
+    real_dir_path = os.path.join(root_dir, dir_path.lstrip("/\\")) # real path
+
+    if not os.path.exists(real_dir_path):
+        return {"status": "failed", "details": "Does not exist!"}
+
+    if not os.path.isdir(real_dir_path):
+        return {"status": "failed", "details": "Not in a directory"}
+
+    try:
+        i: int = 2
+        full_path = os.path.join(real_dir_path, new_dir_name.lstrip("/\\"))
+        temp = full_path[:]
+        while os.path.exists(temp):
+            temp = full_path + "_" + str(i)
+            i += 1
+        full_path = temp
+
+        os.mkdir(full_path)
+
+        return {"status": "success", "details": f"Folder '{os.path.basename(full_path)}' created successfully."}
+    except PermissionError as err:
+        return {"status": "failed", "details": "Writing permission denied!"}

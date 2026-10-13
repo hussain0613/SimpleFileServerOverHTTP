@@ -32,3 +32,17 @@ router.add_api_route(
     methods=["GET"],
     name="search"
 )
+
+router.add_api_route(
+    "/files/",
+    endpoint=endpoints.upload_files,
+    methods=["POST"],
+    name="upload_files"
+)
+
+router.add_api_route(
+    "/directory/",
+    endpoint=endpoints.create_directory,
+    methods=["POST"],
+    name="create_directory"
+)

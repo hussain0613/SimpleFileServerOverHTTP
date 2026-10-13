@@ -1,4 +1,4 @@
-import os, datetime
+import os, datetime, shutil, typing
 
 
 def get_human_readable_size(size_in_bytes) -> str:
@@ -54,3 +54,24 @@ def run_fast_scandir(query: str, contents: dict, current_dir: str, root_dir: str
         subfolders.extend(sf)
         #files.extend(f)
     return subfolders
+
+
+def save_file(file_path: str, file: typing.BinaryIO) -> str:
+    i = 2
+    temp = file_path[:]
+    while os.path.exists(temp):
+        if "." in file_path:
+            temp = f"_{i}.".join(file_path.rsplit(".", maxsplit=2))
+        else:
+            temp = f"{file_path}_{i}"
+        
+        i += 1
+    file_path = temp
+    
+    # file.save(f_path)
+    with open(file_path, "wb") as buffer:
+        print("writing to", file_path)
+        shutil.copyfileobj(file, buffer)
+
+    return file_path
+

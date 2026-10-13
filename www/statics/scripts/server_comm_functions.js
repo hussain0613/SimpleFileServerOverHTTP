@@ -52,7 +52,7 @@ function get_settings(callBack){
 
 function upload_files(formdata){
     let xhr = new XMLHttpRequest()
-    xhr.open("post", "/upload_files/?dir_path="+document.location.pathname.substring(3), true)
+    xhr.open("post", "/api/files/?dir_path="+document.location.pathname.substring(3), true)
     
     let total_size = 0.0
     let msg_cnt = add_msg("preparing upload")
@@ -102,7 +102,7 @@ function upload_files(formdata){
 function create_folder(new_folder_name, callBack){
     // fetch settings from server and then call callBack
     xhr = new XMLHttpRequest()
-    xhr.open("post", `/create_directory/?dir_path=${document.location.pathname.substring(3)}&new_dir_name=${new_folder_name}`, true)
+    xhr.open("post", `/api/directory/?dir_path=${document.location.pathname.substring(3)}&new_dir_name=${new_folder_name}`, true)
     xhr.onreadystatechange = function(){
         if(this.readyState == 4){
             if(this.status == 200){
